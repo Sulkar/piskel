@@ -2,8 +2,8 @@
   var ns = $.namespace('pskl.selection');
 
   var SELECTION_REPLAY = {
-    PASTE : 'REPLAY_PASTE',
-    ERASE : 'REPLAY_ERASE'
+    PASTE: 'REPLAY_PASTE',
+    ERASE: 'REPLAY_ERASE'
   };
 
   ns.SelectionManager = function (piskelController) {
@@ -14,9 +14,9 @@
   };
 
   ns.SelectionManager.prototype.init = function () {
-    $.subscribe(Events.SELECTION_CREATED, this.onSelectionCreated_.bind(this));
-    $.subscribe(Events.SELECTION_DISMISSED, this.onSelectionDismissed_.bind(this));
-    $.subscribe(Events.SELECTION_MOVE_REQUEST, this.onSelectionMoved_.bind(this));
+    $.subscribe(Events.SELECTION_CREATED, $.proxy(this.onSelectionCreated_, this));
+    $.subscribe(Events.SELECTION_DISMISSED, $.proxy(this.onSelectionDismissed_, this));
+    $.subscribe(Events.SELECTION_MOVE_REQUEST, $.proxy(this.onSelectionMoved_, this));
     $.subscribe(Events.CLIPBOARD_COPY, this.copy.bind(this));
     $.subscribe(Events.CLIPBOARD_CUT, this.copy.bind(this));
     $.subscribe(Events.CLIPBOARD_PASTE, this.paste.bind(this));
@@ -25,13 +25,13 @@
     pskl.app.shortcutService.registerShortcut(shortcuts.SELECTION.DELETE, this.onDeleteShortcut_.bind(this));
     pskl.app.shortcutService.registerShortcut(shortcuts.SELECTION.COMMIT, this.commit.bind(this));
 
-    $.subscribe(Events.TOOL_SELECTED, this.onToolSelected_.bind(this));
+    $.subscribe(Events.TOOL_SELECTED, $.proxy(this.onToolSelected_, this));
   };
 
   /**
    * @private
    */
-  ns.SelectionManager.prototype.cleanSelection_ = function() {
+  ns.SelectionManager.prototype.cleanSelection_ = function () {
     if (this.currentSelection) {
       this.currentSelection.reset();
       this.currentSelection = null;
@@ -41,7 +41,7 @@
   /**
    * @private
    */
-  ns.SelectionManager.prototype.onToolSelected_ = function(evt, tool) {
+  ns.SelectionManager.prototype.onToolSelected_ = function (evt, tool) {
     var isSelectionTool = tool instanceof pskl.tools.drawing.selection.BaseSelect;
     if (!isSelectionTool) {
       this.cleanSelection_();
@@ -51,11 +51,11 @@
   /**
    * @private
    */
-  ns.SelectionManager.prototype.onSelectionDismissed_ = function(evt) {
+  ns.SelectionManager.prototype.onSelectionDismissed_ = function (evt) {
     this.cleanSelection_();
   };
 
-  ns.SelectionManager.prototype.onDeleteShortcut_ = function(evt) {
+  ns.SelectionManager.prototype.onDeleteShortcut_ = function (evt) {
     if (this.currentSelection) {
       this.erase();
     } else {
@@ -66,21 +66,23 @@
   ns.SelectionManager.prototype.erase = function () {
     var pixels = this.currentSelection.pixels;
     var currentFrame = this.piskelController.getCurrentFrame();
-    for (var i = 0, l = pixels.length ; i < l ; i++) {
+    for (var i = 0, l = pixels.length; i < l; i++) {
       currentFrame.setPixel(pixels[i].col, pixels[i].row, Constants.TRANSPARENT_COLOR);
     }
 
     $.publish(Events.PISKEL_SAVE_STATE, {
-      type : pskl.service.HistoryService.REPLAY,
-      scope : this,
-      replay : {
-        type : SELECTION_REPLAY.ERASE,
-        pixels : JSON.parse(JSON.stringify(pixels))
+      type: pskl.service.HistoryService.REPLAY,
+      scope: this,
+      replay: {
+        type: SELECTION_REPLAY.ERASE,
+        pixels: JSON.parse(JSON.stringify(pixels))
       }
     });
   };
 
-  ns.SelectionManager.prototype.copy = function(event, domEvent) {
+  ns.SelectionManager.prototype.copy = function (event, domEvent) {
+    console.log("copied")
+    //drei Pixel: z.B.: {"pixels":[{"col":8,"row":10,"color":4278190080},{"col":9,"row":10,"color":4278190080},{"col":10,"row":10,"color":4278190080}],"time":1623360032544}
     if (this.currentSelection && this.piskelController.getCurrentFrame()) {
       this.currentSelection.fillSelectionFromFrame(this.piskelController.getCurrentFrame());
       if (domEvent) {
@@ -93,11 +95,12 @@
     }
   };
 
-  ns.SelectionManager.prototype.paste = function(event, domEvent) {
+  ns.SelectionManager.prototype.paste = function (event, domEvent) {
+    console.log("pasted")
     var items = domEvent ? domEvent.clipboardData.items : [];
 
     try {
-      for (var i = 0 ; i < items.length ; i++) {
+      for (var i = 0; i < items.length; i++) {
         var item = items[i];
 
         if (/^image/i.test(item.type)) {
@@ -107,6 +110,7 @@
         }
 
         if (/^text\/plain/i.test(item.type)) {
+          // z.B.: {"pixels":[{"col":8,"row":10,"color":4278190080},{"col":9,"row":10,"color":4278190080},{"col":10,"row":10,"color":4278190080}],"time":1623360032544}  
           this.pasteText_(item);
           event.stopPropagation();
           return;
@@ -123,15 +127,15 @@
     }
   };
 
-  ns.SelectionManager.prototype.pasteImage_ = function(clipboardItem) {
+  ns.SelectionManager.prototype.pasteImage_ = function (clipboardItem) {
     var blob = clipboardItem.getAsFile();
     pskl.utils.FileUtils.readImageFile(blob, function (image) {
-      pskl.app.fileDropperService.dropPosition_ = {x: 0, y: 0};
+      pskl.app.fileDropperService.dropPosition_ = { x: 0, y: 0 };
       pskl.app.fileDropperService.onImageLoaded_(image, blob);
     }.bind(this));
   };
 
-  ns.SelectionManager.prototype.pasteText_ = function(clipboardItem) {
+  ns.SelectionManager.prototype.pasteText_ = function (clipboardItem) {
     var blob = clipboardItem.getAsString(function (selectionString) {
       var selectionData = JSON.parse(selectionString);
       var time = selectionData.time;
@@ -155,15 +159,14 @@
 
   ns.SelectionManager.prototype.pastePixelsOnCurrentFrame_ = function (pixels) {
     var frame = this.piskelController.getCurrentFrame();
-
     this.pastePixels_(frame, pixels);
 
     $.publish(Events.PISKEL_SAVE_STATE, {
-      type : pskl.service.HistoryService.REPLAY,
-      scope : this,
-      replay : {
-        type : SELECTION_REPLAY.PASTE,
-        pixels : JSON.parse(JSON.stringify(pixels.slice(0)))
+      type: pskl.service.HistoryService.REPLAY,
+      scope: this,
+      replay: {
+        type: SELECTION_REPLAY.PASTE,
+        pixels: JSON.parse(JSON.stringify(pixels.slice(0)))
       }
     });
   };
@@ -172,7 +175,7 @@
    * If the currently selected tool is a selection tool, call commitSelection handler on
    * the current tool instance.
    */
-  ns.SelectionManager.prototype.commit = function() {
+  ns.SelectionManager.prototype.commit = function () {
     var tool = pskl.app.drawingController.currentToolBehavior;
     var isSelectionTool = tool instanceof pskl.tools.drawing.selection.BaseSelect;
     if (isSelectionTool) {
@@ -182,6 +185,7 @@
 
   ns.SelectionManager.prototype.replay = function (frame, replayData) {
     if (replayData.type === SELECTION_REPLAY.PASTE) {
+      console.log("redo")
       this.pastePixels_(frame, replayData.pixels);
     } else if (replayData.type === SELECTION_REPLAY.ERASE) {
       replayData.pixels.forEach(function (pixel) {
@@ -190,19 +194,31 @@
     }
   };
 
-  ns.SelectionManager.prototype.pastePixels_ = function(frame, pixels) {
+  ns.SelectionManager.prototype.pastePixels_ = function (frame, pixels) {
+    var selectionRow = 0;
+    var selectionColumn = 0;
+    if (this.currentSelection) {
+      selectionRow = this.currentSelection.pixels[0].row;
+      selectionColumn = this.currentSelection.pixels[0].col;
+    }
+
+    console.log(pixels)
+
+    var firstPixelColumn = pixels[0].col;
+    var firstPixelRow = pixels[0].row;
     pixels.forEach(function (pixel) {
       if (pixel.color === Constants.TRANSPARENT_COLOR || pixel.color === null) {
         return;
       }
-      frame.setPixel(pixel.col, pixel.row, pixel.color);
+      frame.setPixel(pixel.col - firstPixelColumn + selectionColumn, pixel.row - firstPixelRow + selectionRow, pixel.color); //HIER START
     });
   };
 
   /**
    * @private
    */
-  ns.SelectionManager.prototype.onSelectionCreated_ = function(evt, selection) {
+  ns.SelectionManager.prototype.onSelectionCreated_ = function (evt, selection) {
+    console.log("selected")
     if (selection) {
       this.currentSelection = selection;
     } else {
@@ -213,7 +229,8 @@
   /**
    * @private
    */
-  ns.SelectionManager.prototype.onSelectionMoved_ = function(evt, colDiff, rowDiff) {
+  ns.SelectionManager.prototype.onSelectionMoved_ = function (evt, colDiff, rowDiff) {
+    console.log("move")
     if (this.currentSelection) {
       this.currentSelection.move(colDiff, rowDiff);
     } else {
