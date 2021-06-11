@@ -1,7 +1,15 @@
 Piskel
 ======
 
-[![Travis Status](https://api.travis-ci.org/piskelapp/piskel.png?branch=master)](https://travis-ci.org/piskelapp/piskel) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](https://gruntjs.com/)
+## Start Development Server
+To build Piskel, you need to :
+
+- install node and grunt-cli `npm install grunt-cli -g`
+- clone the repository
+- run `npm install --force`
+- start Dev Server with: `grunt serve`
+
+## Info
 
 Piskel is an easy-to-use sprite editor. It can be used to create game sprites, animations, pixel-art...
 It is the editor used in **[piskelapp.com](https://www.piskelapp.com)**.
