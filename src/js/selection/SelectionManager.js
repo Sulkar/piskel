@@ -81,7 +81,6 @@
   };
 
   ns.SelectionManager.prototype.copy = function (event, domEvent) {
-    console.log("copied")
     //drei Pixel: z.B.: {"pixels":[{"col":8,"row":10,"color":4278190080},{"col":9,"row":10,"color":4278190080},{"col":10,"row":10,"color":4278190080}],"time":1623360032544}
     if (this.currentSelection && this.piskelController.getCurrentFrame()) {
       this.currentSelection.fillSelectionFromFrame(this.piskelController.getCurrentFrame());
@@ -96,7 +95,6 @@
   };
 
   ns.SelectionManager.prototype.paste = function (event, domEvent) {
-    console.log("pasted")
     var items = domEvent ? domEvent.clipboardData.items : [];
 
     try {
@@ -159,14 +157,17 @@
 
   ns.SelectionManager.prototype.pastePixelsOnCurrentFrame_ = function (pixels) {
     var frame = this.piskelController.getCurrentFrame();
-    this.pastePixels_(frame, pixels);
+
+    var updatedPixels = this.preparePastedPixels(pixels);
+
+    this.pastePixels_(frame, updatedPixels);
 
     $.publish(Events.PISKEL_SAVE_STATE, {
       type: pskl.service.HistoryService.REPLAY,
       scope: this,
       replay: {
         type: SELECTION_REPLAY.PASTE,
-        pixels: JSON.parse(JSON.stringify(pixels.slice(0)))
+        pixels: JSON.parse(JSON.stringify(updatedPixels.slice(0)))
       }
     });
   };
@@ -185,7 +186,6 @@
 
   ns.SelectionManager.prototype.replay = function (frame, replayData) {
     if (replayData.type === SELECTION_REPLAY.PASTE) {
-      console.log("redo")
       this.pastePixels_(frame, replayData.pixels);
     } else if (replayData.type === SELECTION_REPLAY.ERASE) {
       replayData.pixels.forEach(function (pixel) {
@@ -194,31 +194,38 @@
     }
   };
 
-  ns.SelectionManager.prototype.pastePixels_ = function (frame, pixels) {
+  ns.SelectionManager.prototype.preparePastedPixels = function (pixels) {
     var selectionRow = 0;
     var selectionColumn = 0;
     if (this.currentSelection) {
       selectionRow = this.currentSelection.pixels[0].row;
       selectionColumn = this.currentSelection.pixels[0].col;
     }
-
-    console.log(pixels)
-
     var firstPixelColumn = pixels[0].col;
     var firstPixelRow = pixels[0].row;
+
+    var updatedPixels = [];
+    pixels.forEach(function (pixel) {
+      pixel.row = pixel.row - firstPixelRow + selectionRow;
+      pixel.col = pixel.col - firstPixelColumn + selectionColumn;
+      updatedPixels.push(pixel);
+    });
+    return updatedPixels;
+  };
+
+  ns.SelectionManager.prototype.pastePixels_ = function (frame, pixels) {
     pixels.forEach(function (pixel) {
       if (pixel.color === Constants.TRANSPARENT_COLOR || pixel.color === null) {
         return;
       }
-      frame.setPixel(pixel.col - firstPixelColumn + selectionColumn, pixel.row - firstPixelRow + selectionRow, pixel.color); //HIER START
+      frame.setPixel(pixel.col, pixel.row, pixel.color);
     });
-  };
+  }
 
   /**
    * @private
    */
   ns.SelectionManager.prototype.onSelectionCreated_ = function (evt, selection) {
-    console.log("selected")
     if (selection) {
       this.currentSelection = selection;
     } else {
@@ -230,7 +237,6 @@
    * @private
    */
   ns.SelectionManager.prototype.onSelectionMoved_ = function (evt, colDiff, rowDiff) {
-    console.log("move")
     if (this.currentSelection) {
       this.currentSelection.move(colDiff, rowDiff);
     } else {
