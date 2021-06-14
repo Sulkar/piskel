@@ -10,7 +10,7 @@
     line-height: 40px;
     font-size: 24px;
     background: black;
-    color: gold;
+    color: tomato;
     z-index: 100;
   }
 
@@ -31,14 +31,25 @@
     border-radius: 3px;
     font-size: 22px;
     color: black;
-    background: gold;
+    background: tomato;
     text-decoration: none;
 
     align-items: center;
     justify-content: center;
   }
+  
+  .piskel-logo{
+    float: left;
+    text-decoration: none;
+    color: tomato;
+  }
 </style>
 <div class="fake-piskelapp-header">
+  <a
+    href="index.html"
+    class="piskel-logo"
+    >PISKEL</a>
+
   <a
     href="index.html"
     target="_blank"
@@ -47,5 +58,7 @@
     rel="tooltip"
     data-placement="left"
     >+</a>
-  <span class="piskel-name"></span>
+  <span class="piskel-name" contenteditable="true"></span> 
+  <input id="piskel-name-input" placeholder="test" />
+  <!-- add input here-->
 </div>

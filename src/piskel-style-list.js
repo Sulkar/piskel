@@ -1,6 +1,6 @@
 // This list is used both by the grunt build and index.html (in debug mode)
 
-(typeof exports != "undefined" ? exports : pskl_exports).styles = [
+(typeof exports != "undefined" ? exports : pskl_exports).styles = [  
   "css/variables.css",
   "css/reset.css",
   "css/style.css",
@@ -41,5 +41,7 @@
   "css/widgets-frame-picker.css",
   "css/widgets-size-picker.css",
   "css/widgets-tabs.css",
-  "css/widgets-wizard.css"
+  "css/widgets-wizard.css",
+
+  "css/custom.css"
 ];

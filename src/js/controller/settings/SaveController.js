@@ -2,11 +2,11 @@
   var ns = $.namespace('pskl.controller.settings');
 
   var PARTIALS = {
-    DESKTOP : 'save-desktop-partial',
-    GALLERY : 'save-gallery-partial',
-    GALLERY_UNAVAILABLE : 'save-gallery-unavailable-partial',
-    LOCALSTORAGE : 'save-localstorage-partial',
-    FILEDOWNLOAD : 'save-file-download-partial'
+    DESKTOP: 'save-desktop-partial',
+    GALLERY: 'save-gallery-partial',
+    GALLERY_UNAVAILABLE: 'save-gallery-unavailable-partial',
+    LOCALSTORAGE: 'save-localstorage-partial',
+    FILEDOWNLOAD: 'save-file-download-partial'
   };
 
   ns.SaveController = function (piskelController) {
@@ -22,9 +22,20 @@
     this.saveForm = document.querySelector('.save-form');
     this.insertSavePartials_();
 
+    
     this.piskelName = document.querySelector('.piskel-name');
+
+
+
+
+    console.log("SaveController")
     this.descriptionInput = document.querySelector('#save-description');
-    this.nameInput =  document.querySelector('#save-name');
+    //this.nameInput =  document.querySelector('#save-name');
+    this.nameInput = document.querySelector('#piskel-name-input');
+    console.log(this.nameInput)
+
+
+
     this.isPublicCheckbox = document.querySelector('input[name=save-public-checkbox]');
     this.updateDescriptorInputs_();
 
@@ -79,9 +90,10 @@
   };
 
   ns.SaveController.prototype.updateDescriptorInputs_ = function (evt) {
+    console.log("updateDescriptorInputs_")
     var descriptor = this.piskelController.getPiskel().getDescriptor();
     this.descriptionInput.value = descriptor.description;
-    this.nameInput.value = descriptor.name;
+    //this.nameInput.value = descriptor.name;
     if (descriptor.isPublic) {
       this.isPublicCheckbox.setAttribute('checked', true);
     }

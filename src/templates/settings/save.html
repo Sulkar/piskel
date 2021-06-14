@@ -1,15 +1,15 @@
 <script type="text/template" id="templates/settings/save.html">
   <div class="settings-section settings-section-save">
     <form action="" method="POST" class="save-form" name="save-form">
-      <div class="settings-title">Sprite Information</div>
+      <div class="settings-title hideUiElement">Sprite Information</div>
       <div class="settings-item">
         <div class="settings-form-section" style="overflow:hidden">
-          <label class="row" style="line-height:20px;">Title : </label>
-          <input id="save-name" type="text" class="save-field textfield" autocomplete="off" />
+          <label class="row hideUiElement" style="line-height:20px;">Title : </label>
+          <input id="save-name" type="text" class="save-field textfield hideUiElement" autocomplete="off" />
         </div>
         <div class="settings-form-section">
-          <label class="row" style="line-height:20px;">Description : </label>
-          <textarea id="save-description" class="save-field textfield"></textarea>
+          <label class="row hideUiElement" style="line-height:20px;">Description : </label>
+          <textarea id="save-description" class="save-field textfield hideUiElement"></textarea>
         </div>
         <div class="settings-form-section  save-public-section">
           <label class="row">
@@ -23,8 +23,8 @@
 
 <!-- save-gallery-partial -->
 <script type="text/template" id="save-gallery-partial">
-  <div class="settings-title">Save online</div>
-  <div class="settings-item">
+  <div class="settings-title hideUiElement">Save online</div>
+  <div class="settings-item hideUiElement">
     <input type="button" class="button button-primary" id="save-gallery-button" value="Save to your gallery" />
     <div class="save-status save-online-status">Your piskel will be stored online in your gallery.</div>
   </div>
@@ -37,8 +37,8 @@
 
 <!-- save-gallery-unavailable-partial -->
 <script type="text/template" id="save-gallery-unavailable-partial">
-  <div class="settings-title">Save online</div>
-  <div class="settings-item">
+  <div class="settings-title hideUiElement">Save online</div>
+  <div class="settings-item hideUiElement">
     <div class="save-status">Login to <a href="https://www.piskelapp.com" target="_blank">piskelapp.com</a> to save and share your sprites online.</div>
   </div>
 </script>
