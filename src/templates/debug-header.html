@@ -18,47 +18,24 @@
     color: red;
   }
 
-  .new-piskel-desktop {
-    position: absolute;
-
-    display: flex;
-    top: 7px;
-    right: 7px;
-
-    height: 26px;
-    width: 26px;
-
-    border-radius: 3px;
-    font-size: 22px;
-    color: black;
-    background: tomato;
-    text-decoration: none;
-
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .piskel-logo{
+  .piskel-logo {
     float: left;
     text-decoration: none;
     color: tomato;
   }
+
+  #piskel-name-input {
+    font-size: 24px;
+    background-color: tomato;
+    color: white;
+    width: 200px;
+  }
 </style>
 <div class="fake-piskelapp-header">
-  <a
-    href="index.html"
-    class="piskel-logo"
-    >PISKEL</a>
+  <a href="index.html" class="piskel-logo">PISKEL</a>
 
-  <a
-    href="index.html"
-    target="_blank"
-    class="new-piskel-desktop button button-primary"
-    title="Create a new sprite"
-    rel="tooltip"
-    data-placement="left"
-    >+</a>
-  <span class="piskel-name" contenteditable="true"></span> 
+
+  <span class="piskel-name"></span>
   <input id="piskel-name-input" placeholder="test" />
   <!-- add input here-->
 </div>

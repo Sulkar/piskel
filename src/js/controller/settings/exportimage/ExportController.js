@@ -29,6 +29,9 @@
   pskl.utils.inherit(ns.ExportController, pskl.controller.settings.AbstractSettingController);
 
   ns.ExportController.prototype.init = function () {
+
+    this.piskelController.getPiskel().setName(document.querySelector('#piskel-name-input').value);
+
     // Initialize zoom controls
     this.scaleInput = document.querySelector('.export-scale .scale-input');
     this.addEventListener(this.scaleInput, 'change', this.onScaleChange_);

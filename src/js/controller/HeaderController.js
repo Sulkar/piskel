@@ -11,8 +11,8 @@
   };
 
   ns.HeaderController.prototype.init = function () {
-    this.piskelName_ = document.querySelector('.piskel-name');
-
+    this.piskelName_ = document.querySelector('#piskel-name-input');
+  
     $.subscribe(Events.BEFORE_SAVING_PISKEL, this.onBeforeSavingPiskelEvent_.bind(this));
     $.subscribe(Events.AFTER_SAVING_PISKEL, this.onAfterSavingPiskelEvent_.bind(this));
 
@@ -26,12 +26,12 @@
   ns.HeaderController.prototype.updateHeader_ = function () {
     try {
       var name = this.piskelController.getPiskel().getDescriptor().name;
-      if (this.savedStatusService.isDirty()) {
+      /*if (this.savedStatusService.isDirty()) {
         name = name + ' *';
-      }
+      }*/
 
       if (this.piskelName_) {
-        this.piskelName_.textContent = name;
+        this.piskelName_.value = name;
       }
     } catch (e) {
       console.warn('Could not update header : ' + e.message);

@@ -21,19 +21,13 @@
   ns.SaveController.prototype.init = function () {
     this.saveForm = document.querySelector('.save-form');
     this.insertSavePartials_();
+    this.piskelName = document.querySelector('#piskel-name-input');
 
-    
-    this.piskelName = document.querySelector('.piskel-name');
-
-
-
-
-    console.log("SaveController")
     this.descriptionInput = document.querySelector('#save-description');
     //this.nameInput =  document.querySelector('#save-name');
     this.nameInput = document.querySelector('#piskel-name-input');
-    console.log(this.nameInput)
-
+    
+    this.piskelController.getPiskel().setName(this.nameInput.value);
 
 
     this.isPublicCheckbox = document.querySelector('input[name=save-public-checkbox]');
