@@ -9,6 +9,9 @@ To build Piskel, you need to :
 - run `npm install --force`
 - start Dev Server with: `grunt serve`
 
+## New Layout - simplified for students
+<img src="misc/newpiskel.png" width="500px" />
+
 ## Info
 
 Piskel is an easy-to-use sprite editor. It can be used to create game sprites, animations, pixel-art...
