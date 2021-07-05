@@ -6,6 +6,10 @@
       template : 'templates/dialogs/cheatsheet.html',
       controller : ns.CheatsheetController
     },
+    'piskelinfo' : {
+      template : 'templates/dialogs/piskelinfo.html',
+      controller : ns.PiskelInfoController
+    },
     'create-palette' : {
       template : 'templates/dialogs/create-palette.html',
       controller : ns.CreatePaletteController
@@ -52,6 +56,8 @@
     pskl.app.shortcutService.registerShortcut(cheatsheetShortcut, this.onCheatsheetShortcut_.bind(this));
     pskl.utils.Event.addEventListener('.cheatsheet-link', 'click', this.onCheatsheetShortcut_, this);
 
+    pskl.utils.Event.addEventListener('.piskel-info', 'click', this.onPiskelInfo_, this);
+
     // adding the .animated class here instead of in the markup to avoid an animation during app startup
     this.dialogWrapper_.classList.add('animated');
     pskl.utils.Event.addEventListener(this.dialogWrapper_, 'click', this.onWrapperClicked_, this);
@@ -63,6 +69,10 @@
 
   ns.DialogsController.prototype.onCheatsheetShortcut_ = function () {
     this.toggleDialog_('cheatsheet');
+  };
+
+  ns.DialogsController.prototype.onPiskelInfo_ = function () {
+    this.toggleDialog_('piskelinfo');
   };
 
   /**

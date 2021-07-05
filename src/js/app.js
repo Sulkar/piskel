@@ -196,11 +196,11 @@
         gui.Window.get().menu = mb;
       }
 
-      if (!pskl.utils.Environment.isIntegrationTest() && pskl.utils.UserAgent.isUnsupported()) {
+      /*if (!pskl.utils.Environment.isIntegrationTest() && pskl.utils.UserAgent.isUnsupported()) {
         $.publish(Events.DIALOG_SHOW, {
           dialogId : 'unsupported-browser'
         });
-      }
+      }*/
 
       if (pskl.utils.Environment.isDebug()) {
         pskl.app.shortcutService.registerShortcut(pskl.service.keyboard.Shortcuts.DEBUG.RELOAD_STYLES,

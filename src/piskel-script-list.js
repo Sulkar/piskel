@@ -161,6 +161,7 @@
   "js/controller/dialogs/importwizard/ImportWizard.js",
   "js/controller/dialogs/PerformanceInfoController.js",
   "js/controller/dialogs/UnsupportedBrowserController.js",
+  "js/controller/dialogs/PiskelInfoController.js",
 
   // Dialogs controller
   "js/controller/dialogs/DialogsController.js",
