@@ -25,7 +25,15 @@
 
   ns.HeaderController.prototype.updateHeader_ = function () {
     try {
-      var name = this.piskelController.getPiskel().getDescriptor().name;
+
+      var name;
+      
+      if(document.querySelector('#piskel-name-input').value != ""){
+        name = document.querySelector('#piskel-name-input').value;
+      }else{
+        name = this.piskelController.getPiskel().getDescriptor().name;
+      }
+      
       /*if (this.savedStatusService.isDirty()) {
         name = name + ' *';
       }*/
