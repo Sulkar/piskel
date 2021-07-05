@@ -6,9 +6,12 @@ To build Piskel, you need to :
 
 - install node and grunt-cli `npm install grunt-cli -g`
 - clone the repository
-- run `npm install --force`
-- start Dev Server with: `grunt serve`
+- run `npm install`
+- start Dev Server with: `grunt play`
+- start Prod Server with: `grunt serve`
+- build and minify files with: `grunt`
 - `grunt serve` will automatically build the project in the dest Folder for deployment
+
 
 ## New Layout - simplified for students
 <img src="misc/newpiskel.png" width="500px" />
